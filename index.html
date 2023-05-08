@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Expense Tracker</title>
+    </head>
+    <body>
+        <h1>EXPENSE TRACKER</h1>
+        <form onsubmit="saveToLocalStorage(event)">
+            <label for="expense">Choose Expense Amount:</label>
+            <input type="number" id="expense" name="expense" required>
+            <label for="description">Choose Description:</label>
+            <select id="description">
+                <option value="">Select an Option</option>
+                <option value="entertainment">Entertainment</option>
+                <option value="household">Household</option>
+                <option value="health">Health</option>
+                <option value="expenses">Expenses</option>
+              </select>
+            <label for="category">Choose Category:</label>
+            <select id="category">
+                <option value="">Select an Option</option>
+                <option value="movie">Movie</option>
+                <option value="outing">Outing</option>
+                <option value="groceries">Groceries</option>
+                <option value="shopping">Shopping</option>
+                <option value="medicines">Medicines</option>
+                <option value="insurance">Insurance</option>
+                <option value="taxes">Taxes</option>
+                <option value="bills">Bills</option>
+              </select>
+            <button>Add Expense</button>
+        </form>
+        <ul id="listOfUsers"></ul>
+        <script>
+            function saveToLocalStorage(event)
+            {
+                // if(event.target.expense.value == null || event.target.expense.value == undefined || event.target.expense.value == "")
+                // {
+                //     alert("Expense cannot be a null value");
+                //     return;
+                // }
+                event.preventDefault();
+                const s1=event.target.expense.value;
+                const s2=event.target.description.value;
+                const s3=event.target.category.value;
+                console.log(localStorage);
+                const obj={
+                    s1,
+                    s2,
+                    s3
+                }
+                localStorage.setItem(obj.s2, JSON.stringify(obj))
+                showUserOnScreen(obj)
+
+            }
+            function showUserOnScreen(user)
+            {
+                document.getElementById('expense').value='';
+                document.getElementById('description').value='';
+                document.getElementById('category').value='';
+                const parentNode=document.getElementById('listOfUsers')
+                const childHTML=`<li id=${user.s2}> - ${user.s1} - ${user.s2} -${user.s3} 
+                    <button onclick=deleteExpense('${user.s2}')> Delete Expense </button>
+                    <button onclick=editExpense('${user.s1}','${user.s2}','${user.s3}')> Edit Expense </button>
+                    </li>`
+                parentNode.innerHTML=parentNode.innerHTML+childHTML
+                
+            }
+            function editExpense(s1,s2,s3)
+            {
+                document.getElementById('expense').value=s1;
+                document.getElementById('description').value=s2;
+                document.getElementById('category').value=s3;
+                
+                deleteExpense(s2)
+            }
+            function deleteExpense(s2)
+            {
+                console.log(s2)
+                localStorage.removeItem(s2)
+                removeUserFromScreen(s2)
+            }
+            function removeUserFromScreen(s2)
+            {
+                const parentNode=document.getElementById('listOfUsers')
+                const childToBeDelete=document.getElementById(s2)
+            
+                parentNode.removeChild(childToBeDelete)
+            }
+
+        </script>
+         
+    </body>
+</html>
